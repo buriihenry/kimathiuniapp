@@ -12,7 +12,8 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
         }
 
         $rootScope.userEmail = null;
-        $rootScope.baseUrl = 'https://bucketlist-app.firebaseio.com/';
+        //replace with owm firebase url
+        $rootScope.baseUrl = 'https://dekutapp.firebaseio.com/';
         var authRef = new Firebase($rootScope.baseUrl);
         $rootScope.auth = $firebaseAuth(authRef);
 
@@ -45,11 +46,12 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
         $rootScope.checkSession = function() {
             var auth = new FirebaseSimpleLogin(authRef, function(error, user) {
                 if (error) {
-                    // no action yet.. redirect to default route
+                    // no action yet.. redirect to default route(#welcomepage)
                     $rootScope.userEmail = null;
-                    $window.location.href = '#/auth/signin';
+                    $window.location.href = '#/auth/welcome';
                 } else if (user) {
                     // user authenticated with Firebase
+                    //change to home page
                     $rootScope.userEmail = user.email;
                     $window.location.href = ('#/bucket/list');
                 } else {
@@ -84,6 +86,15 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 'auth-signup': {
                     templateUrl: 'templates/auth-signup.html',
                     controller: 'SignUpCtrl'
+                }
+            }
+        })
+        //added welcome page, adjust the controller
+        .state('auth.welcome', {
+            url: '/welcome',
+            views: {
+                'auth-welcome': {
+                    templateUrl: 'templates/welcome.html'
                 }
             }
         })
