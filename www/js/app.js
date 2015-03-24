@@ -94,7 +94,7 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
             url: '/welcome',
             views: {
                 'auth-welcome': {
-                    templateUrl: 'templates/welcome.html'
+                    templateUrl: 'templates/auth-welcome.html'
                 }
             }
         })
