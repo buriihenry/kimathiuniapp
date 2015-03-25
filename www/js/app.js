@@ -48,7 +48,7 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 if (error) {
                     // no action yet.. redirect to default route(#welcomepage)
                     $rootScope.userEmail = null;
-                    $window.location.href = '#/auth/welcome';
+                    $window.location.href = '#/auth/signin';
                 } else if (user) {
                     // user authenticated with Firebase
                     //change to home page
@@ -95,6 +95,7 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
             views: {
                 'auth-welcome': {
                     templateUrl: 'templates/auth-welcome.html'
+
                 }
             }
         })
@@ -121,5 +122,19 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 }
             }
         })
-    $urlRouterProvider.otherwise('/auth/signin');
+.state('home', {
+            url: "/home",
+            abstract: true,
+            templateUrl: "templates/home.html"
+        })
+.state('home.welcome', {
+            url: '',
+            views: {
+                'home-wel': {
+                    templateUrl: 'templates/home-wel.html'
+
+                }
+            }
+        })
+    $urlRouterProvider.otherwise('/home');
 });
