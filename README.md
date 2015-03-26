@@ -30,6 +30,8 @@ Its so clumpsy going every time to the school site to check whatsup or anything 
 ##ScreenShots
 ![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/login.png)
 ![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/signup.png)
+![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/welcomepage.png)
+
 
 <p/>
 <br/>
