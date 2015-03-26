@@ -28,9 +28,10 @@ Its so clumpsy going every time to the school site to check whatsup or anything 
 *You Don't Know Your Lecturer {Lecturer details and contacts}<br/>
 
 ##ScreenShots
+![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/welcomepage.png)
 ![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/login.png)
 ![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/signup.png)
-![alt tag](https://raw.githubusercontent.com/denzelwamburu/kimathiuniapp/master/www/img/welcomepage.png)
+
 
 
 <p/>
