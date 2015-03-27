@@ -1,7 +1,6 @@
 
     <ion-content class="ionic login animate-pan-in-left" style="background-image: url('../img/mountains.jpg');">
-    <i class="ion-home" side="left"></i>
-        <i class="ion-home" side="right"></i>
+        
 
         <div class="hero no-header flat">
             <div class="content">
@@ -10,14 +9,7 @@
             </div>
         </div>
         <!--div for continue with google-->
-        <div>
-        <a class="btn-auth btn-google large" ng-click="login('google')">
-          <i class="fa fa-facebook fa-2x"></i>Continue With Google
-          <!--<i class="ion-social-facebook"></i> -->
-
-
-      </a>
-      </div>
+        
         <div class="list">
             <ion-md-input placeholder="Email" highlight-color="balanced" type="email" ng-model="user.email"></ion-md-input>
             <ion-md-input placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input>
@@ -26,8 +18,16 @@
             <button class="button button-block button-positive waves-effect waves-light" ng-click="validateUser()">Login &nbsp
 <i class="ion-key"></i>
             </button>
+            
         </div>
+        <div class="contbutt">
+        <a class="button button-assertive" ng-click="login('google')">
+          <i class="ion-social-googleplus"></i>&nbsp Continue With Google
+          <!--<i class="ion-social-facebook"></i> -->
 
+
+      </a>
+      </div>
         
     </ion-content>
 

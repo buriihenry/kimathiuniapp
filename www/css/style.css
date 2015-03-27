@@ -20,4 +20,29 @@
 .text-center {
   text-align: center;
 }
-
+}
+.text-left {
+  text-align: left;
+  padding: 12px;
+}
+.text-right {
+  text-align: right;
+}
+.introcontent {
+	bottom: -45px;
+position: absolute;
+text-align: center;
+width: 100%;
+z-index: 1;
+}
+.text-center {
+  text-align: center;
+  padding: 50px;
+}
+.menunav {
+  text-align: left;
+  padding: 3px;
+}
+.contbutt {
+  text-align: center;
+}
