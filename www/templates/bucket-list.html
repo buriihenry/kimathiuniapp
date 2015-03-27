@@ -1,7 +1,6 @@
 <ion-header-bar class="bar-positive">
-      <button class="button button-fab button-fab-top-right button-assertive icon ion-android-add waves-effect waves-light" ng-click="newTask()">New</button>
-
-   <h1 class="title">My Bucket List</h1>
+   <button class="button button-clear" ng-click="newTask()">New</button>
+   <h1 class="title">ToRead</h1>
    <button class="button button-clear" ng-click="logout()">Logout</button>
 </ion-header-bar>
 <ion-content class="has-header padding" has-tabs="true" on-refresh="onRefresh()">
@@ -20,7 +19,7 @@
    <div class="card" >
       <div class="item item-text-wrap" ng-show="noData">
          <span>
-         No Items in your bucket List. Click  <a href="javascript:" ng-click="newTask()">Here</a> and create one
+         No Items in your ToRead. Click  <a href="javascript:" ng-click="newTask()">Here</a> and create one
          </span>
       </div>
    </div>
