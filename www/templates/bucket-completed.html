@@ -1,8 +1,8 @@
-<ion-header-bar class="bar-positive">
-   <h1 class="title">Completed Items</h1>
+<ion-header-bar class="ionic bar-positive">
+   <h1 class="title">Completed Reads</h1>
    <button class="button button-clear" ng-click="logout()">Logout</button>
 </ion-header-bar>
-<ion-content class="has-header padding" has-tabs="true" on-refresh="onRefresh()">
+<ion-content class="ionic has-header padding" has-tabs="true" on-refresh="onRefresh()">
    <div class="card" ng-repeat="item in list" >
       <div class="item item-text-wrap">
          <span>
@@ -17,10 +17,10 @@
    <div class="card" >
       <div class="item item-text-wrap" ng-show="noData || incomplete">
          <span ng-show="incomplete">
-         You can have not completed any of your Bucket List items yet. Try harder!!
+         You can have not completed any of your ToReads items yet. Try harder!!
          </span>
          <span ng-show="noData">
-         No Items in your bucket List.
+         No Items in your ToRead List.
          </span>
       </div>
    </div>
