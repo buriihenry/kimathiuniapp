@@ -136,5 +136,20 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 }
             }
         })
+.state('tour', {
+            url: "/tour",
+            abstract: true,
+            templateUrl: "templates/tour.html"
+        })
+.state('tour.home', {
+            url: '',
+            views: {
+                'tour-home': {
+                    templateUrl: 'templates/tour-home.html'
+
+                }
+            }
+        })
+
     $urlRouterProvider.otherwise('/home');
 });
