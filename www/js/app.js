@@ -150,6 +150,34 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 }
             }
         })
+    .state('tour.about', {
+            url: '/about',
+            views: {
+                'tour-about': {
+                    templateUrl: 'templates/tour-about.html'
+
+                }
+            }
+        })
+        .state('tour.map', {
+            url: '/map',
+            views: {
+                'tour-map': {
+                    templateUrl: 'templates/tour-map.html',
+                    controller: 'MapCtrl'
+
+                }
+            }
+        })
+       .state('tour.facilities', {
+            url: '/facilities',
+            views: {
+                'tour-facilities': {
+                    templateUrl: 'templates/tour-facilities.html'
+
+                }
+            }
+        })
 
     $urlRouterProvider.otherwise('/home');
 });
