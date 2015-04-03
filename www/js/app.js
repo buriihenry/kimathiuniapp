@@ -179,7 +179,38 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 }
             }
         })
+    //Home after Login
+.state('land', {
+            url: "/land",
+            abstract: true,
+            templateUrl: "templates/land.html"
+        })
+.state('land.home', {
+            url: '',
+            views: {
+                'land-home': {
+                    templateUrl: 'templates/land-home.html'
 
+                }
+            }
+        })
+    .state('land.news', {
+            url: '/news',
+            views: {
+                'land-news': {
+                    templateUrl: 'templates/land-news.html'
 
+                }
+            }
+        })
+ .state('land.notices', {
+            url: '/notices',
+            views: {
+                'land-notices': {
+                    templateUrl: 'templates/land-notices.html'
+
+                }
+            }
+        })
     $urlRouterProvider.otherwise('/home');
 });
