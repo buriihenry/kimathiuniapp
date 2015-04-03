@@ -2,7 +2,7 @@ angular.module('ionic.map', [])
 
     .controller('MapCtrl', function($scope, $ionicLoading, $compile) {
       function initialize() {
-        var myLatlng = new google.maps.LatLng(43.07493,-89.381388);
+        var myLatlng = new google.maps.LatLng(0.3953,36.9624);
         
         var mapOptions = {
           center: myLatlng,
@@ -13,7 +13,7 @@ angular.module('ionic.map', [])
             mapOptions);
         
         //Marker + infowindow + angularjs compiled ng-click
-        var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+        var contentString = "<div><a ng-click='clickTest()'>Main Campus</a></div>";
         var compiled = $compile(contentString)($scope);
 
         var infowindow = new google.maps.InfoWindow({
