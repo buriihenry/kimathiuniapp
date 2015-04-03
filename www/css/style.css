@@ -55,3 +55,23 @@ z-index: 1;
 .scroll {
   height: 100%;
 }
+body {
+  height: auto;
+  min-height: 100%;
+}
+
+.scroll, .angular-leaflet-map {
+  height: 100%;
+}
+
+.leaflet-bottom {
+  bottom : 10px;
+}
+
+.item.item-body p {
+  margin-top: 0;
+}
+
+.tabs.border-top {
+  border-top: 1px solid #ddd !important;
+}

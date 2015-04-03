@@ -1,0 +1,7 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/Users/Denz/Documents/GitHub/kimathiuniapp/www/js/map/controllers/mapController.js",
+        "C:/Users/Denz/Documents/GitHub/kimathiuniapp/www/js/map/directives/igTruncate.js",
+        "C:/Users/Denz/Documents/GitHub/kimathiuniapp/www/js/map/services/instructionsService.js"
+    ]
+}

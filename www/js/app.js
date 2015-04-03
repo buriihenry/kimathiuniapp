@@ -1,4 +1,4 @@
-angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.controllers'])
+angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.controllers', 'ionic.map'])
 
 .run(function($ionicPlatform, $rootScope, $firebaseAuth, $firebase, $window, $ionicLoading) {
     $ionicPlatform.ready(function() {
@@ -164,7 +164,8 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
             views: {
                 'tour-map': {
                     templateUrl: 'templates/tour-map.html',
-                    controller: 'MapCtrl'
+                     controller: 'MapCtrl'
+                  
 
                 }
             }
@@ -178,6 +179,7 @@ angular.module('bucketList', ['ionic', 'ionMdInput', 'firebase', 'bucketList.con
                 }
             }
         })
+
 
     $urlRouterProvider.otherwise('/home');
 });

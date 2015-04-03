@@ -214,6 +214,7 @@ angular.module('bucketList.controllers', [])
     };
 });
 
+
 function escapeEmailAddress(email) {
     if (!email) return false
     // Replace '.' (not allowed in a Firebase key) with ','
