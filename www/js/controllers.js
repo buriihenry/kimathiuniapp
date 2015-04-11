@@ -1,224 +1,173 @@
-angular.module('bucketList.controllers', [])
-    .controller('SignInCtrl', [
-        '$scope', '$rootScope', '$firebaseAuth', '$window',
-        function($scope, $rootScope, $firebaseAuth, $window) {
-            // check session
-            $rootScope.checkSession();
+angular.module('remindMe.controllers', [])
 
-            $scope.user = {
-                email: "",
-                password: ""
-            };
-            $scope.validateUser = function() {
-                $rootScope.show('Please wait.. Authenticating');
-                var email = this.user.email;
-                var password = this.user.password;
-                if (!email || !password) {
-                    $rootScope.notify("Please enter valid credentials");
-                    return false;
-                }
+.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthFactory', 'SessionFactory',
+  function($scope, $rootScope, $location, AuthFactory, SessionFactory) {
 
-                $rootScope.auth.$login('password', {
-                    email: email,
-                    password: password
-                }).then(function(user) {
-                    $rootScope.hide();
-                    $rootScope.userEmail = user.email;
-                    $window.location.href = ('#/bucket/list');
-                }, function(error) {
-                    $rootScope.hide();
-                    if (error.code == 'INVALID_EMAIL') {
-                        $rootScope.notify('Invalid Email Address');
-                    } else if (error.code == 'INVALID_PASSWORD') {
-                        $rootScope.notify('Invalid Password');
-                    } else if (error.code == 'INVALID_USER') {
-                        $rootScope.notify('Invalid User');
-                    } else {
-                        $rootScope.notify('Oops something went wrong. Please try again later');
-                    }
-                });
-            }
+    $scope.login = {
+      username: '',
+      password: ''
+    };
+
+    $scope.loginUser = function() {
+      $rootScope.showLoading("Authenticating..");
+      AuthFactory.login($scope.login).success(function(data) {
+        SessionFactory.createSession(data.user);
+        $location.path('/home');
+        $rootScope.hideLoading();
+      }).error(function(data) {
+        if (data.status == 400) {
+          $rootScope.hideLoading();
+          $rootScope.toast('Invalid Credentials');
         }
-    ])
+      });
+    };
 
-.controller('SignUpCtrl', [
-    '$scope', '$rootScope', '$firebaseAuth', '$window',
-    function($scope, $rootScope, $firebaseAuth, $window) {
-
-        $scope.user = {
-            email: "",
-            password: ""
-        };
-        $scope.createUser = function() {
-            var email = this.user.email;
-            var password = this.user.password;
-            if (!email || !password) {
-                $rootScope.notify("Please enter valid credentials");
-                return false;
-            }
-            $rootScope.show('Please wait.. Registering');
-
-            $rootScope.auth.$createUser(email, password, function(error, user) {
-                if (!error) {
-                    $rootScope.hide();
-                    $rootScope.userEmail = user.email;
-                    $window.location.href = ('#/bucket/list');
-                } else {
-                    $rootScope.hide();
-                    if (error.code == 'INVALID_EMAIL') {
-                        $rootScope.notify('Invalid Email Address');
-                    } else if (error.code == 'EMAIL_TAKEN') {
-                        $rootScope.notify('Email Address already taken');
-                    } else {
-                        $rootScope.notify('Oops something went wrong. Please try again later');
-                    }
-                }
-            });
-        }
-    }
+  }
 ])
 
-.controller('myListCtrl', function($rootScope, $scope, $window, $ionicModal, $firebase) {
-    $rootScope.show("Please wait... Processing");
-    $scope.list = [];
-    var bucketListRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail));
-    bucketListRef.on('value', function(snapshot) {
-        var data = snapshot.val();
-        $scope.list = [];
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                if (data[key].isCompleted == false) {
-                    data[key].key = key;
-                    $scope.list.push(data[key]);
-                }
-            }
-        }
+.controller('RegisterCtrl', ['$scope', '$rootScope', '$location', 'AuthFactory', 'SessionFactory',
+  function($scope, $rootScope, $location, AuthFactory, SessionFactory) {
+    $scope.reg = {
+      username: '',
+      password: '',
+      name: '',
+      phone: ''
+    };
 
-        if ($scope.list.length == 0) {
-            $scope.noData = true;
-        } else {
-            $scope.noData = false;
+    $scope.registerUser = function() {
+      $rootScope.showLoading("Registering..");
+      AuthFactory.register($scope.reg).success(function(data) {
+        SessionFactory.createSession(data.user);
+        // redirect
+        $location.path('/home');
+        $rootScope.hideLoading();
+      }).error(function(data) {
+        if (data.status == 400) {
+          $rootScope.hideLoading();
+          $rootScope.toast('Invalid Credentials');
+        } else if (data.status == 409) {
+          $rootScope.hideLoading();
+          $rootScope.toast('A user with this username already exists');
         }
-        $rootScope.hide();
+      });
+    };
+  }
+])
+
+.controller('HomeCtrl', ['$scope', '$rootScope', 'SessionFactory', 'ReminderFactory', '$ionicModal', '$timeout',
+  function($scope, $rootScope, SessionFactory, ReminderFactory, $ionicModal, $timeout) {
+    $scope.reminders = [];
+
+    // Trigger Load reminders
+    $timeout(function() {
+      $rootScope.$broadcast('load-reminders');
+    }, 9); // Race Condition
+
+    $scope.doRefresh = function() {
+      $rootScope.$broadcast('load-reminders');
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
+    $rootScope.createNew = function() {
+      $scope.modal.show();
+    }
+
+    $ionicModal.fromTemplateUrl('templates/newReminder.html', function(modal) {
+      $scope.modal = modal;
+    }, {
+      animation: 'slide-in-up',
+      focusFirstInput: true
     });
 
-
-    $ionicModal.fromTemplateUrl('templates/newItem.html', function(modal) {
-        $scope.newTemplate = modal;
+    $rootScope.$on('load-reminders', function(event) {
+      $rootScope.showLoading('Fetching Reminders..');
+      var user = SessionFactory.getSession();
+      ReminderFactory.getAll(user._id).success(function(data) {
+        $scope.reminders = data.reminders;
+        $rootScope.hideLoading();
+      }).error(function(data) {
+        $rootScope.hideLoading();
+        $rootScope.toast('Oops.. Something went wrong');
+      });
     });
 
-    $scope.newTask = function() {
-        $scope.newTemplate.show();
+    $scope.deleteReminder = function(reminder) {
+      $rootScope.showLoading('Deleting Reminder..');
+
+      ReminderFactory.delete(reminder.userId, reminder._id)
+        .success(function(data) {
+          console.log(data);
+          $rootScope.hideLoading();
+          $rootScope.$broadcast('load-reminders');
+        }).error(function(data) {
+          $rootScope.hideLoading();
+          console.log(data);
+        })
+    }
+
+  }
+])
+
+.controller('NewReminderCtrl', ['$scope', '$ionicPopup', '$filter', '$rootScope', 'ReminderFactory', 'SessionFactory',
+  function($scope, $ionicPopup, $filter, $rootScope, ReminderFactory, SessionFactory) {
+
+    /** http://codepen.io/ooystein/pen/edjyH **/
+    $scope.reminder = {
+      'remindThis': '',
+      'formattedDate': '',
+      'shdlSMS': true,
+      'shdlCall': true
+
     };
 
-    $scope.markCompleted = function(key) {
-        $rootScope.show("Please wait... Updating List");
-        var itemRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail) + '/' + key);
-        itemRef.update({
-            isCompleted: true
-        }, function(error) {
-            if (error) {
-                $rootScope.hide();
-                $rootScope.notify('Oops! something went wrong. Try again later');
-            } else {
-                $rootScope.hide();
-                $rootScope.notify('Successfully updated');
-            }
-        });
-    };
+    $scope.$watch('reminder.formattedDate', function(unformattedDate) {
+      $scope.reminder.formattedDate = $filter('date')(unformattedDate, 'dd/MM/yyyy HH:mm');
+    });
 
-    $scope.deleteItem = function(key) {
-        $rootScope.show("Please wait... Deleting from List");
-        var itemRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail));
-        bucketListRef.child(key).remove(function(error) {
-            if (error) {
-                $rootScope.hide();
-                $rootScope.notify('Oops! something went wrong. Try again later');
-            } else {
-                $rootScope.hide();
-                $rootScope.notify('Successfully deleted');
-            }
-        });
-    };
-})
+    $scope.createReminder = function() {
+      $rootScope.showLoading('Creating..');
+      var user = SessionFactory.getSession();
+      var _r = $scope.reminder;
+      var d = new Date(_r.fullDate);
 
-.controller('newCtrl', function($rootScope, $scope, $window, $firebase) {
-    $scope.data = {
-        item: ""
-    };
+      if (_r.shdlSMS) _r.shdlSMS = d.getTime();
+      if (_r.shdlCall) _r.shdlCall = d.getTime();
 
-    $scope.close = function() {
+      delete _r.formattedDate;
+      delete _r.fullDate;
+
+      ReminderFactory.create(user._id, _r).success(function(data) {
+        $rootScope.hideLoading();
         $scope.modal.hide();
+        $rootScope.$broadcast('load-reminders');
+      }).error(function(data) {
+        $rootScope.hideLoading();
+        console.log(data);
+      });
+
+
     };
 
-    $scope.createNew = function() {
-        var item = this.data.item;
-        if (!item) return;
-        $scope.modal.hide();
-        $rootScope.show();
+    $scope.openDatePicker = function() {
+      $scope.tmp = {};
+      $scope.tmp.newDate = $scope.reminder.formattedDate;
 
-        $rootScope.show("Please wait... Creating new");
+      var remindWhen = $ionicPopup.show({
+        template: '<datetimepicker ng-model="tmp.newDate"></datetimepicker>',
+        title: "When to Remind",
+        scope: $scope,
+        buttons: [{
+          text: 'Cancel'
+        }, {
+          text: '<b>Select</b>',
+          type: 'button-stable',
+          onTap: function(e) {
+            $scope.reminder.fullDate = $scope.tmp.newDate;
+            $scope.reminder.formattedDate = $scope.tmp.newDate;
+          }
+        }]
+      });
+    }
 
-        var form = {
-            item: item,
-            isCompleted: false,
-            created: Date.now(),
-            updated: Date.now()
-        };
-
-        var bucketListRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail));
-        $firebase(bucketListRef).$add(form);
-        $rootScope.hide();
-
-    };
-})
-
-.controller('completedCtrl', function($rootScope, $scope, $window, $firebase) {
-    $rootScope.show("Please wait... Processing");
-    $scope.list = [];
-
-    var bucketListRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail));
-    bucketListRef.on('value', function(snapshot) {
-        $scope.list = [];
-        var data = snapshot.val();
-
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                if (data[key].isCompleted == true) {
-                    data[key].key = key;
-                    $scope.list.push(data[key]);
-                }
-            }
-        }
-        if ($scope.list.length == 0) {
-            $scope.noData = true;
-        } else {
-            $scope.noData = false;
-        }
-
-        $rootScope.hide();
-    });
-
-    $scope.deleteItem = function(key) {
-        $rootScope.show("Please wait... Deleting from List");
-        var itemRef = new Firebase($rootScope.baseUrl + escapeEmailAddress($rootScope.userEmail));
-        bucketListRef.child(key).remove(function(error) {
-            if (error) {
-                $rootScope.hide();
-                $rootScope.notify('Oops! something went wrong. Try again later');
-            } else {
-                $rootScope.hide();
-                $rootScope.notify('Successfully deleted');
-            }
-        });
-    };
-});
-
-
-function escapeEmailAddress(email) {
-    if (!email) return false
-    // Replace '.' (not allowed in a Firebase key) with ','
-    email = email.toLowerCase();
-    email = email.replace(/\./g, ',');
-    return email.trim();
-}
+  }
+]);
