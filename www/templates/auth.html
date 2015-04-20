@@ -1,12 +1,15 @@
-<ion-tabs class="tabs-positive">
+<ion-tabs class="ionic tabs-positive tabs-icon-top">
 
-   <ion-tab title="Sign In" icon-on="ion-ios7-locked" 
-      icon-off="ion-ios7-locked-outline" href="#/auth/signin">
-      <ion-nav-view name="auth-signin"></ion-nav-view>
-   </ion-tab>
-   <ion-tab title="Sign Up" icon-on="ion-ios7-personadd" 
-      icon-off="ion-ios7-personadd-outline" href="#/auth/signup">
-      <ion-nav-view name="auth-signup"></ion-nav-view>
-   </ion-tab>
-   
+  <!-- Login Tab -->
+  <ion-tab title="Login" icon-on="ion-ios7-unlocked" icon-off="ion-ios7-unlocked-outline" href="#/auth/login">
+    <ion-nav-view name="auth-login"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- Register Tab -->
+  <ion-tab title="Register" icon-on="ion-ios7-personadd" icon-off="ion-ios7-personadd-outline" href="#/auth/register">
+    <ion-nav-view name="auth-register"></ion-nav-view>
+  </ion-tab>
+
+
 </ion-tabs>
