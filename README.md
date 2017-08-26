@@ -1,5 +1,7 @@
 ## Client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/denzelwamburu/kimathiuniapp.svg)](https://greenkeeper.io/)
+
 This Branch is for the Apps version but with twitt feature
 
 ##Server
